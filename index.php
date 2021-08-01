@@ -14,6 +14,22 @@ try {
       echo $e->getMessage();
       exit;
 }
+
+/* データベース新規登録処理 */
+if(!empty($_POST['inputName'])){
+    try{
+        $sql = "INSERT INTO sortable(name) VALUES(:ONAMAE)";
+        $stmt = $dbh->prepare($sql);
+
+        $stmt->bindParam(':ONAMAE', $_POST['inputName'], PDO::PARAM_STR);
+        $stmt->execute();
+
+        header('location: http://localhost:8888/PHP/13.php_js/');
+        exit();
+    }catch (PDOException $e) {
+        echo 'データベースにアクセスできません！'.$e->getMessage();
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="ja">
@@ -24,6 +40,12 @@ try {
 </head>
 <body>
 <div id="wrapper">
+    <div id="input_form">
+        <form action="index.php" method="POST">
+            <input type="text" name="inputName">
+            <input type="submit" value="登録">
+        </form>
+    </div>
 
 <div id="drag-area">
 <?php
