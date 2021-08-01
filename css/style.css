@@ -1,0 +1,41 @@
+*reset*/
+body,div,p{margin:0;}
+.clearfix:after {
+    content:"";
+    display:block;
+    clear:both;
+}
+
+/*frame*/
+body {
+  height:100%;
+  color:#ccc;
+  font-size:10px;
+}
+#wrapper {
+  border: 2px dashed #ccc;
+  margin:15px;
+  border-radius: 6px;
+  height: 600px;
+}
+
+/*drag*/
+#drag-area {
+  position: relative;
+  height: 500px;
+  width:980px;
+  margin: 5px auto;
+  border: 1px solid #333;
+  border-radius: 6px;
+}
+.drag {
+  position: absolute;
+  padding: 1em;
+  color: #666;
+  border-radius: 5px;
+  background: #efefef;
+  border: 3px solid #ccc;
+}
+.name {
+  font-size:12px;
+}
