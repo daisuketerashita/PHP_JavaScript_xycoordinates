@@ -1,6 +1,19 @@
 <?php
+require_once('./dbconnect.php');
+
 ini_set('display_errors', 1);  /* MAMPの設定次第では記述が必要 1は表示、0は非表示*/
 error_reporting(-1);  /* 0は表示させない、-1はすべて表示 */
+
+
+/* データベースへ接続 */
+try {
+    $dbh = new PDO(DB_DNS, DB_USER, DB_PASSWORD);
+    $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $dbh->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+} catch (PDOException $e){
+      echo $e->getMessage();
+      exit;
+}
 ?>
 <!DOCTYPE html>
 <html lang="ja">
@@ -13,7 +26,16 @@ error_reporting(-1);  /* 0は表示させない、-1はすべて表示 */
 <div id="wrapper">
 
 <div id="drag-area">
-drag area
+<?php
+$sql = 'SELECT * FROM sortable';
+$stmt = $dbh->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+
+foreach ($stmt as $result){
+    echo '  <div class="drag" data-num="'.$result['id'].'" style="left:'.$result['left_x'].'px; top:'.$result['top_y'].'px;">'.PHP_EOL;
+    echo '    <p><span class="name">'.$result['id'].' '.$result['name'].'</span></p>'.PHP_EOL;
+    echo '  </div>'.PHP_EOL;
+}
+?>
 </div>
 
 </div>
