@@ -37,6 +37,8 @@ if(!empty($_POST['inputName'])){
   <meta charset="UTF-8">
   <title>sortable</title>
   <link href="css/style.css" rel="stylesheet">
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1/jquery-ui.min.js"></script>
 </head>
 <body>
 <div id="wrapper">
@@ -61,5 +63,16 @@ foreach ($stmt as $result){
 </div>
 
 </div>
+<script>
+$(function(){
+  $('.drag').draggable({       /* class="drag"が指定されている要素をdraggableに */
+    containment:'#drag-area',  /* ドラッグできる範囲 */
+    cursor:'move',             /* ドラッグ時のカーソル形状 */
+    opacity:0.6,               /* ドラッグ中の透明度 */
+    scroll:true,               /* ウィンドウ内をスクロールしたい */
+    zIndex:10,                 /* ドラッグ中の重ね順を一番上に */
+  });
+});
+</script>
 </body>
 </html>
