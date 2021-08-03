@@ -30,6 +30,19 @@ if(!empty($_POST['inputName'])){
         echo 'データベースにアクセスできません！'.$e->getMessage();
     }
 }
+
+if(!empty($_POST['left'])){
+    try{
+      $sql  = 'UPDATE `sortable` SET `left_x` = :LEFT, `top_y` = :TOP WHERE `id` = :NUMBER';
+      $stmt = $dbh->prepare($sql);
+      $stmt->bindParam(':LEFT'  , $_POST['left'], PDO::PARAM_INT);
+      $stmt->bindParam(':TOP'   , $_POST['top'],  PDO::PARAM_INT);
+      $stmt->bindParam(':NUMBER', $_POST['id'],   PDO::PARAM_INT);
+      $stmt->execute();
+    } catch (PDOException $e) {
+      echo $e->getMessage();
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="ja">
@@ -39,6 +52,40 @@ if(!empty($_POST['inputName'])){
   <link href="css/style.css" rel="stylesheet">
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
   <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1/jquery-ui.min.js"></script>
+  <script>
+$(function(){
+  $('.drag').draggable({
+    containment:'#drag-area',
+    cursor:'move',
+    opacity:0.6,
+    scroll:true,
+    zIndex:10,
+    /* ドラッグ終了時に起動 */
+    stop:function(event, ui){
+      let myNum  = $(this).data('num');
+      let myLeft = (ui.offset.left - $('#drag-area').offset().left);
+      let myTop  = (ui.offset.top  - $('#drag-area').offset().top);
+      $.ajax({
+        type:'POST',
+        url :'http://localhost:8888/',
+        data: {
+          id  :myNum,
+          left:myLeft,
+          top :myTop
+        }
+      }).done(function(){
+         console.log('成功');
+      }).fail(function(XMLHttpRequest, textStatus, errorThrown){
+         console.log(XMLHttpRequest.status);
+         console.log(textStatus);
+         console.log(errorThrown);
+      });
+        console.log("左: " + myLeft);
+        console.log("上: " + myTop);
+    }
+  });
+});
+</script>
 </head>
 <body>
 <div id="wrapper">
@@ -63,16 +110,6 @@ foreach ($stmt as $result){
 </div>
 
 </div>
-<script>
-$(function(){
-  $('.drag').draggable({       /* class="drag"が指定されている要素をdraggableに */
-    containment:'#drag-area',  /* ドラッグできる範囲 */
-    cursor:'move',             /* ドラッグ時のカーソル形状 */
-    opacity:0.6,               /* ドラッグ中の透明度 */
-    scroll:true,               /* ウィンドウ内をスクロールしたい */
-    zIndex:10,                 /* ドラッグ中の重ね順を一番上に */
-  });
-});
-</script>
+
 </body>
 </html>
